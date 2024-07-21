@@ -1,80 +1,80 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class OneWayPlatform : MonoBehaviour
 {
-    //Enum that sets up different types for one way platforms
+    // 枚举类型，设置不同类型的单向平台
     public enum OneWayPlatforms { GoingUp, GoingDown, Both }
     public OneWayPlatforms type = OneWayPlatforms.Both;
-    //A short delay to allow the player to collide with the platform again
-    [SerializeField]
-    private float delay = .5f;
-    //The collider on the platform
+    // 一个短暂的延迟，允许玩家再次与平台碰撞
+    [SerializeField] private float delay = .5f;
+    // 平台的碰撞器
     private Collider2D col;
-    //Reference of the player
+    // 玩家引用
     private GameObject player;
-    //Reference to the collider on the player
+    // 玩家上的碰撞器引用
     private Collider2D playerCollider;
 
     private void Start()
     {
-        //Grabs a reference of the current collider on the platform
+        // 获取当前平台上的碰撞器引用
         col = GetComponent<Collider2D>();
-        //Less optimal way to find Player
-        //player = GameObject.FindGameObjectWithTag("Player");
-        //More optimal way to find Player; requires some sort of script that only the active player in the scene would have
+        // 较不优化的方式寻找玩家
+        // player = GameObject.FindGameObjectWithTag("Player");
+        // 更优化的方式寻找玩家；需要某种只在场景中活跃玩家身上存在的脚本
         player = FindObjectOfType<Character>().gameObject;
         playerCollider = player.GetComponent<Collider2D>();
     }
 
-    //Unity event that gets called once everytime something collides with the platform
+    // 每次有碰撞箱与平台碰撞时，Unity事件会被调用一次
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Checks to see if the gameobject colliding with the platform is the player
+        // 检查与平台碰撞的游戏对象是否为玩家
         if (collision.gameObject == player)
         {
-            //Checks to see if player is not above the platform so the player can stand on the platform while jumping and then checks to see if the platform will allow the player to jump up through it;
+            // 检查玩家是否不在平台上方，以便玩家可以在跳跃时站在平台上，然后检查平台是否允许玩家向上跳跃穿过它
             if (playerCollider.bounds.min.y < col.bounds.center.y && type != OneWayPlatforms.GoingDown)
             {
-                //Sets the player as a gameobject that should ignore the platform collider so the player can pass through
+                // 将玩家设置为忽略平台碰撞器的游戏对象，以便玩家可以穿过
                 Physics2D.IgnoreCollision(playerCollider, col, true);
-                //Sets the jump passingThroughPlatform bool to true so it doesn't enter the grounded state while passing through it; you may not need this line of code for your solution
+                // 设置跳跃 passingThroughPlatform 布尔值为 true，以便在穿过平台时不会进入地面状态；你的解决方案中可能不需要这一行代码
                 player.GetComponent<Jump>().passingThroughPlatform = true;
-                //Runs coroutine to allow the player to collide with the platform again
+                // 运行协程，以允许玩家再次与平台碰撞
                 StartCoroutine(StopIgnoring());
             }
         }
     }
 
-    //This handles falling through a one way platform if standing on top of platform
+    // 这个方法处理当玩家站在平台上时向下穿过单向平台
     private void OnCollisionStay2D(Collision2D collision)
     {
-        //Checks to see if the gameobject colliding with the platform is the player
-        if (collision.gameObject == player) 
+        // 检查与平台碰撞的游戏对象是否为玩家
+        if (collision.gameObject == player)
         {
-            //Checks to see if the Input allows for a downward jump and that the player is actually on top of the one way platform
+            // 检查输入是否允许向下跳跃，并且玩家实际上在单向平台上方
             if (player.GetComponent<Jump>().downJumpPressed && playerCollider.bounds.min.y > col.bounds.center.y && type != OneWayPlatforms.GoingUp)
             {
-                //Sets the player as a gameobject that should ignore the platform collider so the player can pass through
+                // 将玩家设置为忽略平台碰撞器的游戏对象，以便玩家可以穿过
                 Physics2D.IgnoreCollision(playerCollider, col, true);
-                //Sets the jump passingThroughPlatform bool to true so it doesn't enter the grounded state while passing through it
+                // 设置跳跃 passingThroughPlatform 布尔值为 true，以便在穿过平台时不会进入地面状态
                 player.GetComponent<Jump>().passingThroughPlatform = true;
-                //Runs coroutine to allow the player to collide with the platform again
+                // 运行协程，以允许玩家再次与平台碰撞
                 StartCoroutine(StopIgnoring());
             }
         }
     }
 
-    //Coroutine that toggles the collider on the platform to allow the player to collide with it again
+    // 协程，切换平台上的碰撞器，以允许玩家再次与其碰撞
     private IEnumerator StopIgnoring()
     {
-        //Waits a short delay setup at the top of this script in the variables
+        // 等待在脚本顶部设置的短暂延迟
         yield return new WaitForSeconds(delay);
-        //Sets the player as a gameobject that should collide the platform collider so the player can stand on it again
+        // 将玩家设置为应该与平台碰撞器碰撞的游戏对象，以便玩家可以再次站在其上
         Physics2D.IgnoreCollision(playerCollider, col, false);
-        //Sets the jump passingThroughPlatform bool to false so the player can enter the grounded state
+        // 设置跳跃 passingThroughPlatform 布尔值为 false，以便玩家可以进入地面状态
         player.GetComponent<Jump>().passingThroughPlatform = false;
     }
 }
