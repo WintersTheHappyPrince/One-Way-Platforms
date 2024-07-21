@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
+//按照平台碰撞箱的实际使用情况修改或者删除这行代码
 [RequireComponent(typeof(BoxCollider2D))]
+
 public class OneWayPlatform : MonoBehaviour
 {
     // 枚举类型，设置不同类型的单向平台
