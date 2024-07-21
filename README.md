@@ -1,18 +1,4 @@
-# One-Way-Platforms
-For a detailed explination on how these scripts work, visit my tutorial here: https://youtu.be/Xro32KNo5Qk
+主要用于处理2d平台跳跃游戏中供玩家角色通过的“单向平台”问题
+只对单向平台部分做了简单汉化处理方便我自己阅读
 
-Replicating the way in which Dead Cells handles one way platforms while also considering a ledge hang. If you want all the features
-like you would see in Dead Cells but also want to use your own scripts and aren't sure how to set that up, then watch the video I have
-on my YouTube channel that goes over how to grab what you will need from my scripts and how to put them into your scripts.
-
-If you just want very basic one way platform abilities then all you will need to copy is the OneWayPlatform script and put it on
-any GameObject that would act as a one way platform; there is some logic inside it that you might need to remove or adjust, so
-take a look at the script if you don't want to watch the video and get tips on how to make it work in your project.
-
-If you want one way platforms with the ability to hang from the ledge if ledge hanging would make sense, then copy the OneWayPlatform,
-Ledge, and LedgeLocator scripts. As mentioned, attatch the OneWayPlatform and Ledge scripts to the platforms you want to behave as
-one way platforms, and attach the LedgeLocator script to the player; default values for LedgeLocator are setup in script already, but
-for a better understanding of how the LedgeLocator script works, visit my YouTube video that goes over in detail how everything works:
-https://youtu.be/88NEMnzxwBs
-
-For a playlist that goes over all my 2D platformer videos, click here: https://www.youtube.com/playlist?list=PLEPcs9R3SIZ5URg0-dCnOn5xsJYg5SkBB
+代码库来自I-Am-Err00r的One-Way-Platforms，版权和许可证条款归原作者所有
